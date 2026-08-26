@@ -61,6 +61,26 @@ func TestInstructionsString(t *testing.T) {
 	}
 }
 
+// todo this is my own test func -> maybe delete later
+func TestInstructionsString2(t *testing.T) {
+	tests := []struct {
+		instruction Instructions
+		expected    string
+	}{
+		{Make(OpConstant, 1), "0000 OpConstant 1\n"},
+		{Make(OpConstant, 2), "0000 OpConstant 2\n"},
+		{Make(OpConstant, 65535), "0000 OpConstant 65535\n"},
+	}
+
+	for _, tt := range tests {
+		formatedInstruction := tt.instruction.String()
+		if formatedInstruction != tt.expected {
+			t.Errorf("instructions wrongly formatted.\nwant=%q\ngot= %q",
+				tt.expected, formatedInstruction)
+		}
+	}
+}
+
 func TestReadOperands(t *testing.T) {
 	tests := []struct {
 		op        Opcode
