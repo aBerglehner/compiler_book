@@ -39,6 +39,14 @@ func runCompilerTests(t *testing.T, tests []compilerTestCase) {
 
 		compiler := New()
 		err := compiler.Compile(program)
+
+		// just some logging
+		fmt.Printf("constants: %v instructions: %v\n", compiler.constants, compiler.instructions)
+		for _, v := range compiler.constants {
+			fmt.Printf("constant: %v\n", v)
+		}
+		// end logging
+
 		if err != nil {
 			t.Fatalf("compiler error: %s", err)
 		}
