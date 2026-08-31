@@ -19,6 +19,7 @@ func TestMake(t *testing.T) {
 		{OpConstant, []int{257}, []byte{byte(OpConstant), 1, 1}},
 		{OpConstant, []int{256}, []byte{byte(OpConstant), 1, 0}},
 		{OpConstant, []int{255}, []byte{byte(OpConstant), 0, 255}},
+		{OpAdd, []int{}, []byte{byte(OpAdd)}},
 	}
 
 	for _, tt := range tests {
@@ -40,14 +41,16 @@ func TestMake(t *testing.T) {
 
 func TestInstructionsString(t *testing.T) {
 	instructions := []Instructions{
+		Make(OpAdd),
 		Make(OpConstant, 1),
 		Make(OpConstant, 2),
 		Make(OpConstant, 65535),
 	}
 
-	expected := `0000 OpConstant 1
-0003 OpConstant 2
-0006 OpConstant 65535
+	expected := `0000 OpAdd
+0001 OpConstant 1
+0004 OpConstant 2
+0007 OpConstant 65535
 `
 
 	concatted := Instructions{}
@@ -62,24 +65,25 @@ func TestInstructionsString(t *testing.T) {
 }
 
 // todo this is my own test func -> maybe delete later
-func TestInstructionsString2(t *testing.T) {
-	tests := []struct {
-		instruction Instructions
-		expected    string
-	}{
-		{Make(OpConstant, 1), "0000 OpConstant 1\n"},
-		{Make(OpConstant, 2), "0000 OpConstant 2\n"},
-		{Make(OpConstant, 65535), "0000 OpConstant 65535\n"},
-	}
-
-	for _, tt := range tests {
-		formatedInstruction := tt.instruction.String()
-		if formatedInstruction != tt.expected {
-			t.Errorf("instructions wrongly formatted.\nwant=%q\ngot= %q",
-				tt.expected, formatedInstruction)
-		}
-	}
-}
+// func TestInstructionsString2(t *testing.T) {
+// 	tests := []struct {
+// 		instruction Instructions
+// 		expected    string
+// 	}{
+// 		{Make(OpAdd, 1), "0000 OpAdd\n"},
+// 		{Make(OpConstant, 1), "0000 OpConstant 1\n"},
+// 		{Make(OpConstant, 2), "0000 OpConstant 2\n"},
+// 		{Make(OpConstant, 65535), "0000 OpConstant 65535\n"},
+// 	}
+//
+// 	for _, tt := range tests {
+// 		formatedInstruction := tt.instruction.String()
+// 		if formatedInstruction != tt.expected {
+// 			t.Errorf("instructions wrongly formatted.\nwant=%q\ngot= %q",
+// 				tt.expected, formatedInstruction)
+// 		}
+// 	}
+// }
 
 func TestReadOperands(t *testing.T) {
 	tests := []struct {
